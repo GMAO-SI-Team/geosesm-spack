@@ -12,14 +12,13 @@ class Geosgcm(CMakePackage):
     """
 
     homepage = "https://github.com/GEOS-ESM/GEOSgcm"
-    url = "https://github.com/GEOS-ESM/GEOSgcm/archive/refs/tags/v11.6.0.tar.gz"
-    list_url = "https://github.com/GEOS-ESM/GEOSgcm/tags"
     git = "https://github.com/GEOS-ESM/GEOSgcm.git"
 
     maintainers("mathomp4", "tclune")
 
     version("main", branch="main")
-    version("11.6.0", sha256="5dca972d2f951033159f5aa13ab15461474bb9138b0b60d8dc12548a335a0c1d")
+    version("12.0.0", branch="feature/sdrabenh/gcm_v12-rc1")
+    version("11.6.0", tag="v11.6.0", commit="3feaeb6695134ed04ad29079af176d104fdd73bb", preferred=True)
 
     variant("debug", default=False, description="Build with debugging")
     variant("f2py", default=False, description="Build with f2py support")
@@ -48,6 +47,10 @@ class Geosgcm(CMakePackage):
     depends_on("py-pyyaml")
     depends_on("py-numpy")
     depends_on("perl")
+
+    # Currently we are having issues with our f2py code and python 3.12 (aka meson) For now
+    # we will restrict the python version to <3.12
+    depends_on("python@3:3.11", when="+f2py")
 
     # These are similarly the dependencies of MAPL. Not sure if we'll ever use MAPL as library
     depends_on("hdf5")
@@ -89,6 +92,12 @@ class Geosgcm(CMakePackage):
             #       and it was found that blobless clones can save a lot of
             #       time
             mepo("clone", "--partial=blobless")
+
+            # Currently, when the version is 12 or higher we also need to run:
+            #  mepo checkout-if-exists feature/sdrabenh/gcm_v12-rc1
+            # As this branch is still in development
+            if self.spec.satisfies("@12:"):
+                mepo("checkout-if-exists", "feature/sdrabenh/gcm_v12-rc1")
 
     def cmake_args(self):
         args = [
