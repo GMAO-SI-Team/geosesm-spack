@@ -12,13 +12,14 @@ class Geosgcm(CMakePackage):
     """
 
     homepage = "https://github.com/GEOS-ESM/GEOSgcm"
-    url = "https://github.com/GEOS-ESM/GEOSgcm/archive/refs/tags/v11.5.2.tar.gz"
+    url = "https://github.com/GEOS-ESM/GEOSgcm/archive/refs/tags/v11.6.0.tar.gz"
     list_url = "https://github.com/GEOS-ESM/GEOSgcm/tags"
     git = "https://github.com/GEOS-ESM/GEOSgcm.git"
 
     maintainers("mathomp4", "tclune")
 
     version("main", branch="main")
+    version("11.6.0", sha256="5dca972d2f951033159f5aa13ab15461474bb9138b0b60d8dc12548a335a0c1d")
 
     variant("debug", default=False, description="Build with debugging")
     variant("f2py", default=False, description="Build with f2py support")
@@ -62,14 +63,15 @@ class Geosgcm(CMakePackage):
     depends_on("fargparse@1.7.0:")
 
     # when using apple-clang version 15.x or newer, need to use the llvm-openmp library
-    depends_on("llvm-openmp", when="%apple-clang@15:", type=("build", "run"))
+    depends_on("llvm-openmp", when="%apple-clang", type=("build", "run"))
 
     # MAPL as library would be like:
     #  depends_on("mapl@2.46.1")
     # but we don't want to do this in general due to the speed of MAPL development
+    # and the fact that it just doesn't work at the moment
 
     # When we move to FMS as library, we'll need to add something like this:
-    # depends_on("fms@2024.01:~gfs_phys+fpic~quad_precision+32bit+64bit+yaml constants=GEOS")
+    depends_on("fms@2024.01.01 ~gfs_phys +pic precision=32,64 constants=GEOS", when="@12:")
 
     # We also depend on mepo
     depends_on("mepo", type="build")
