@@ -12,13 +12,18 @@ class Geosgcm(CMakePackage):
     """
 
     homepage = "https://github.com/GEOS-ESM/GEOSgcm"
+    url = "https://github.com/GEOS-ESM/GEOSgcm/archive/refs/tags/v11.6.1.tar.gz"
     git = "https://github.com/GEOS-ESM/GEOSgcm.git"
+    list_url = "https://github.com/GEOS-ESM/GEOSgcm/tags"
 
     maintainers("mathomp4", "tclune")
 
     version("main", branch="main")
     version("12.0.0", branch="feature/sdrabenh/gcm_v12-rc1")
-    version("11.6.0", tag="v11.6.0", commit="3feaeb6695134ed04ad29079af176d104fdd73bb", preferred=True)
+    version("11.6.1", tag="v11.6.1", commit="c3a0f1b3c7ea340ed0b532e49742f410da966ec4", preferred=True)
+    version("11.6.0", tag="v11.6.0", commit="3feaeb6695134ed04ad29079af176d104fdd73bb")
+    # version("11.6.1", sha256="f77a6e292726322b8726d13d7eb67282caaf01f3fe30cba744da6010d6554fef", preferred=True)
+    # version("11.6.0", sha256="5dca972d2f951033159f5aa13ab15461474bb9138b0b60d8dc12548a335a0c1d")
 
     variant("debug", default=False, description="Build with debugging")
     variant("f2py", default=False, description="Build with f2py support")
@@ -60,10 +65,10 @@ class Geosgcm(CMakePackage):
     depends_on("esmf~debug", when="~debug")
     depends_on("esmf+debug", when="+debug")
 
-    depends_on("gftl@1.13.0:")
-    depends_on("gftl-shared@1.8.0:")
-    depends_on("pflogger@1.14.0:")
-    depends_on("fargparse@1.7.0:")
+    depends_on("gftl@1.14.0:")
+    depends_on("gftl-shared@1.9.0:")
+    depends_on("pflogger@1.15.0:")
+    depends_on("fargparse@1.8.0:")
 
     # when using apple-clang version 15.x or newer, need to use the llvm-openmp library
     depends_on("llvm-openmp", when="%apple-clang", type=("build", "run"))
@@ -74,7 +79,8 @@ class Geosgcm(CMakePackage):
     # and the fact that it just doesn't work at the moment
 
     # When we move to FMS as library, we'll need to add something like this:
-    depends_on("fms@2024.01.01 ~gfs_phys +pic precision=32,64 constants=GEOS", when="@12:")
+    depends_on("fms precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Release +deprecated_io", when="@12: ~debug")
+    depends_on("fms precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Debug +deprecated_io", when="@12: +debug")
 
     # We also depend on mepo
     depends_on("mepo", type="build")
@@ -132,6 +138,7 @@ class Geosgcm(CMakePackage):
         # - Intel MPI --> intelmpi
         # - MVAPICH --> mvapich
         # - HPE MPT --> mpt
+        # - Cray MPICH --> mpich
 
         if self.spec.satisfies("^mpich"):
             args.append(self.define("MPI_STACK", "mpich"))
@@ -143,6 +150,8 @@ class Geosgcm(CMakePackage):
             args.append(self.define("MPI_STACK", "mvapich"))
         elif self.spec.satisfies("^mpt"):
             args.append(self.define("MPI_STACK", "mpt"))
+        elif self.spec.satisfies("^cray-mpich"):
+            args.append(self.define("MPI_STACK", "mpich"))
         else:
             raise InstallError("Unsupported MPI stack")
 
@@ -156,3 +165,4 @@ class Geosgcm(CMakePackage):
         # name is common and used all over the place,
         # and if it is set it breaks the mapl build.
         env.unset("BASEDIR")
+
