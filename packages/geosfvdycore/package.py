@@ -6,32 +6,28 @@
 from spack.package import *
 
 
-class Geosgcm(CMakePackage):
+class Geosfvdycore(CMakePackage):
     """
-    GEOS Earth System Model GEOSgcm Fixture
+    GEOS Earth System Model GEOSfvdycore Fixture
     """
 
-    homepage = "https://github.com/GEOS-ESM/GEOSgcm"
-    url = "https://github.com/GEOS-ESM/GEOSgcm/archive/refs/tags/v11.6.1.tar.gz"
-    git = "https://github.com/GEOS-ESM/GEOSgcm.git"
-    list_url = "https://github.com/GEOS-ESM/GEOSgcm/tags"
+    homepage = "https://github.com/GEOS-ESM/GEOSfvdycore"
+    url = "https://github.com/GEOS-ESM/GEOSfvdycore/archive/refs/tags/v2.16.0.tar.gz"
+    git = "https://github.com/GEOS-ESM/GEOSfvdycore.git"
+    list_url = "https://github.com/GEOS-ESM/GEOSfvdycore/tags"
 
     maintainers("mathomp4", "tclune")
 
     version("main", branch="main")
-    version("12.0.0", branch="feature/sdrabenh/gcm_v12-rc1")
-    version("11.6.1", tag="v11.6.1", commit="c3a0f1b3c7ea340ed0b532e49742f410da966ec4", preferred=True)
-    version("11.6.0", tag="v11.6.0", commit="3feaeb6695134ed04ad29079af176d104fdd73bb")
-    # version("11.6.1", sha256="f77a6e292726322b8726d13d7eb67282caaf01f3fe30cba744da6010d6554fef", preferred=True)
-    # version("11.6.0", sha256="5dca972d2f951033159f5aa13ab15461474bb9138b0b60d8dc12548a335a0c1d")
+    version("3.0.0", branch="feature/sdrabenh/gcm_v12-rc1")
+    version("2.16.0", tag="v2.16.0", commit="13a12a77c279068aab252263068128323630c322", preferred=True)
 
     variant("debug", default=False, description="Build with debugging")
     variant("f2py", default=False, description="Build with f2py support")
-    variant("extdata2g", default=True, description="Use ExtData2G")
     variant(
         "develop",
         default=False,
-        description="Update GEOSgcm_GridComp GEOSgcm_App GMAO_Shared GEOS_Util "
+        description="Update GMAO_Shared GEOS_Util "
         "subrepos to their develop branches (used internally for testing)",
     )
 
@@ -82,8 +78,8 @@ class Geosgcm(CMakePackage):
     # and the fact that it just doesn't work at the moment
 
     # When we move to FMS as library, we'll need to add something like this:
-    depends_on("fms precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Release +deprecated_io", when="@12: ~debug")
-    depends_on("fms precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Debug +deprecated_io", when="@12: +debug")
+    depends_on("fms precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Release +deprecated_io", when="@3: ~debug")
+    depends_on("fms precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Debug +deprecated_io", when="@3: +debug")
 
     # We also depend on mepo
     depends_on("mepo", type="build")
@@ -102,21 +98,13 @@ class Geosgcm(CMakePackage):
             #       time
             mepo("clone", "--partial=blobless")
 
-            # If we build with the develop variant, we need to run
-            # 'mepo develop GEOSgcm_GridComp GEOSgcm_App GMAO_Shared GEOS_Util'
-            if self.spec.satisfies("+develop"):
-                mepo("develop", "GEOSgcm_GridComp", "GEOSgcm_App", "GMAO_Shared", "GEOS_Util")
-
-            # Currently, when the version is 12 or higher we also need to run:
-            #  mepo checkout-if-exists feature/sdrabenh/gcm_v12-rc1
-            # As this branch is still in development
-            if self.spec.satisfies("@12:"):
-                mepo("checkout-if-exists", "feature/sdrabenh/gcm_v12-rc1")
+            # If we use the develop variant, we run "mepo develop GMAO_Shared GEOS_Util"
+            if "+develop" in self.spec:
+                mepo("develop", "GMAO_Shared", "GEOS_Util")
 
     def cmake_args(self):
         args = [
             self.define_from_variant("USE_F2PY", "f2py"),
-            self.define_from_variant("USE_EXTDATA2G", "extdata2g"),
             self.define("CMAKE_MODULE_PATH", self.spec["esmf"].prefix.cmake),
         ]
 
