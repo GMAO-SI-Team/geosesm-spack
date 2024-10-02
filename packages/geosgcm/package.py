@@ -20,6 +20,9 @@ class Geosgcm(CMakePackage):
 
     version("main", branch="main")
     version("12.0.0", branch="feature/sdrabenh/gcm_v12-rc1")
+    # NOTE: We use tag and commit due to an issue in mepo:
+    #   https://github.com/GEOS-ESM/mepo/issues/311
+    # This hopefully will be fixed soon and we can move to "normal" checksum style
     version("11.6.1", tag="v11.6.1", commit="c3a0f1b3c7ea340ed0b532e49742f410da966ec4", preferred=True)
     version("11.6.0", tag="v11.6.0", commit="3feaeb6695134ed04ad29079af176d104fdd73bb")
     # version("11.6.1", sha256="f77a6e292726322b8726d13d7eb67282caaf01f3fe30cba744da6010d6554fef", preferred=True)
@@ -75,6 +78,8 @@ class Geosgcm(CMakePackage):
 
     # when using apple-clang version 15.x or newer, need to use the llvm-openmp library
     depends_on("llvm-openmp", when="%apple-clang", type=("build", "run"))
+
+    depends_on("udunits")
 
     # MAPL as library would be like:
     #  depends_on("mapl@2.46.1")

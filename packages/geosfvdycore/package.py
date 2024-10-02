@@ -20,7 +20,10 @@ class Geosfvdycore(CMakePackage):
 
     version("main", branch="main")
     version("3.0.0", branch="feature/sdrabenh/gcm_v12-rc1")
-    version("2.16.0", tag="v2.16.0", commit="13a12a77c279068aab252263068128323630c322", preferred=True)
+    # NOTE: We use tag and commit due to an issue in mepo:
+    #   https://github.com/GEOS-ESM/mepo/issues/311
+    # This hopefully will be fixed soon and we can move to "normal" checksum style
+    version("2.18.0", tag="v2.18.0", commit="f86f61656a76fd02a24814167f29e7a20acf63df", preferred=True)
 
     variant("debug", default=False, description="Build with debugging")
     variant("f2py", default=False, description="Build with f2py support")
@@ -72,6 +75,8 @@ class Geosfvdycore(CMakePackage):
     # when using apple-clang version 15.x or newer, need to use the llvm-openmp library
     depends_on("llvm-openmp", when="%apple-clang", type=("build", "run"))
 
+    depends_on("udunits")
+
     # MAPL as library would be like:
     #  depends_on("mapl@2.46.1")
     # but we don't want to do this in general due to the speed of MAPL development
@@ -99,7 +104,7 @@ class Geosfvdycore(CMakePackage):
             mepo("clone", "--partial=blobless")
 
             # If we use the develop variant, we run "mepo develop GMAO_Shared GEOS_Util"
-            if "+develop" in self.spec:
+            if self.spec.satisfies("+develop"):
                 mepo("develop", "GMAO_Shared", "GEOS_Util")
 
     def cmake_args(self):
