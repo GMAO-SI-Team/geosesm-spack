@@ -19,7 +19,7 @@ class Geosgcm(CMakePackage):
     maintainers("mathomp4", "tclune")
 
     version("main", branch="main")
-    version("12.0.0", branch="feature/sdrabenh/gcm_v12-rc1")
+    version("12.0.0", branch="feature/sdrabenh/gcm_v12")
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
@@ -30,7 +30,6 @@ class Geosgcm(CMakePackage):
 
     variant("debug", default=False, description="Build with debugging")
     variant("f2py", default=False, description="Build with f2py support")
-    variant("extdata2g", default=True, description="Use ExtData2G")
     variant(
         "develop",
         default=False,
@@ -45,7 +44,7 @@ class Geosgcm(CMakePackage):
         values=("Debug", "Release", "Aggressive"),
     )
 
-    depends_on("cmake@3.17:", type="build")
+    depends_on("cmake@3.24:", type="build")
     depends_on("ecbuild", type="build")
 
     depends_on("mpi")
@@ -113,15 +112,14 @@ class Geosgcm(CMakePackage):
                 mepo("develop", "GEOSgcm_GridComp", "GEOSgcm_App", "GMAO_Shared", "GEOS_Util")
 
             # Currently, when the version is 12 or higher we also need to run:
-            #  mepo checkout-if-exists feature/sdrabenh/gcm_v12-rc1
+            #  mepo checkout-if-exists feature/sdrabenh/gcm_v12
             # As this branch is still in development
             if self.spec.satisfies("@12:"):
-                mepo("checkout-if-exists", "feature/sdrabenh/gcm_v12-rc1")
+                mepo("checkout-if-exists", "feature/sdrabenh/gcm_v12")
 
     def cmake_args(self):
         args = [
             self.define_from_variant("USE_F2PY", "f2py"),
-            self.define_from_variant("USE_EXTDATA2G", "extdata2g"),
             self.define("CMAKE_MODULE_PATH", self.spec["esmf"].prefix.cmake),
         ]
 
