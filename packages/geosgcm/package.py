@@ -12,7 +12,7 @@ class Geosgcm(CMakePackage):
     """
 
     homepage = "https://github.com/GEOS-ESM/GEOSgcm"
-    url = "https://github.com/GEOS-ESM/GEOSgcm/archive/refs/tags/v11.6.1.tar.gz"
+    url = "https://github.com/GEOS-ESM/GEOSgcm/archive/refs/tags/v11.6.3.tar.gz"
     git = "https://github.com/GEOS-ESM/GEOSgcm.git"
     list_url = "https://github.com/GEOS-ESM/GEOSgcm/tags"
 
@@ -23,10 +23,10 @@ class Geosgcm(CMakePackage):
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
-    version("11.6.1", tag="v11.6.1", commit="c3a0f1b3c7ea340ed0b532e49742f410da966ec4", preferred=True)
+    version("11.6.3", tag="v11.6.3", commit="1bf10d3fd30ad9ee90d3400bd214d88ed763b06f", preferred=True)
+    version("11.6.2", tag="v11.6.2", commit="fdbab3d7f32fe17bef689a1cdc5be2da71f03e5e")
+    version("11.6.1", tag="v11.6.1", commit="c3a0f1b3c7ea340ed0b532e49742f410da966ec4")
     version("11.6.0", tag="v11.6.0", commit="3feaeb6695134ed04ad29079af176d104fdd73bb")
-    # version("11.6.1", sha256="f77a6e292726322b8726d13d7eb67282caaf01f3fe30cba744da6010d6554fef", preferred=True)
-    # version("11.6.0", sha256="5dca972d2f951033159f5aa13ab15461474bb9138b0b60d8dc12548a335a0c1d")
 
     variant("debug", default=False, description="Build with debugging")
     variant("f2py", default=False, description="Build with f2py support")
@@ -58,9 +58,9 @@ class Geosgcm(CMakePackage):
     depends_on("py-numpy")
     depends_on("perl")
 
-    # Currently we are having issues with our f2py code and python 3.12 (aka meson) For now
-    # we will restrict the python version to <3.12
-    depends_on("python@3:3.11", when="+f2py")
+    # We don't allow Python 3.13 only because we have not been able
+    # to test with it yet.
+    depends_on("python@3:3.12", when="+f2py")
 
     # These are similarly the dependencies of MAPL. Not sure if we'll ever use MAPL as library
     depends_on("hdf5")
@@ -81,9 +81,10 @@ class Geosgcm(CMakePackage):
     depends_on("udunits")
 
     # MAPL as library would be like:
-    #  depends_on("mapl@2.46.1")
-    # but we don't want to do this in general due to the speed of MAPL development
-    # and the fact that it just doesn't work at the moment
+    #  depends_on("mapl@2.51:")
+    # but we don't want to do this in general due to the speed of MAPL
+    # development in that some features we need may not be in the latest
+    # release yet
 
     # When we move to FMS as library, we'll need to add something like this:
     depends_on("fms precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Release +deprecated_io", when="@12: ~debug")
