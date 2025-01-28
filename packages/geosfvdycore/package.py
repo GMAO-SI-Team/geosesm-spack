@@ -23,7 +23,9 @@ class Geosfvdycore(CMakePackage):
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
-    version("2.19.1", tag="v2.19.1", commit="67e6b3915c3e0ebab20e9df29a354db8cc5e987b", preferred=True)
+    version("2.21.0", tag="v2.21.0", commit="ecd01f19718de9e76fce3d5d5630d4727f67f80d", preferred=True)
+    version("2.20.0", tag="v2.20.0", commit="c8529e55cf002b71b101c265b328155fa848c53d")
+    version("2.19.1", tag="v2.19.1", commit="67e6b3915c3e0ebab20e9df29a354db8cc5e987b")
     version("2.19.0", tag="v2.19.0", commit="89ea359c91bae105d7a4a3ac2ca83421b15b5c80")
     version("2.18.0", tag="v2.18.0", commit="f86f61656a76fd02a24814167f29e7a20acf63df")
 
