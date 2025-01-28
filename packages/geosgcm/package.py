@@ -87,7 +87,7 @@ class Geosgcm(CMakePackage):
     # Notice to maintainers, make sure this is the same version as in MAPL
     # that GEOSgcm has internally. Also, make sure the ESMF version above
     # is compatible with this version of MAPL
-    depends_on("mapl@2.52:", when="~external-mapl")
+    depends_on("mapl@2.52:", when="+external-mapl")
     depends_on("mapl@2.52: +debug", when="+external-mapl +debug")
 
     # When we move to FMS as library, we'll need to add something like this:
