@@ -86,7 +86,7 @@ class Geosfvdycore(CMakePackage):
     # Notice to maintainers, make sure this is the same version as in MAPL
     # that GEOSgcm has internally. Also, make sure the ESMF version above
     # is compatible with this version of MAPL
-    depends_on("mapl@2.52:", when="~external-mapl")
+    depends_on("mapl@2.52:", when="+external-mapl")
     depends_on("mapl@2.52: +debug", when="+external-mapl +debug")
 
     # v3 will have FMS outside of GEOSfvdycore. Note we are only doing 32-bit here as we don't really have
