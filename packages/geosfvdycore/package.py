@@ -44,6 +44,8 @@ class Geosfvdycore(CMakePackage):
     )
 
     depends_on("cmake@3.24:", type="build")
+    variant("external-mapl", default=False, description="Build with external MAPL", when="@3:")
+
     depends_on("ecbuild", type="build")
 
     depends_on("mpi")
@@ -66,8 +68,8 @@ class Geosfvdycore(CMakePackage):
     depends_on("netcdf-c")
     depends_on("netcdf-fortran")
     depends_on("esmf@8.6.1:")
-    depends_on("esmf~debug", when="~debug")
-    depends_on("esmf+debug", when="+debug")
+    depends_on("esmf ~debug", when="~debug")
+    depends_on("esmf +debug", when="+debug")
 
     depends_on("gftl@1.14.0:")
     depends_on("gftl-shared@1.9.0:")
@@ -79,10 +81,11 @@ class Geosfvdycore(CMakePackage):
 
     depends_on("udunits")
 
-    # MAPL as library would be like:
-    #  depends_on("mapl@2.46.1")
-    # but we don't want to do this in general due to the speed of MAPL development
-    # and the fact that it just doesn't work at the moment
+    # Notice to maintainers, make sure this is the same version as in MAPL
+    # that GEOSgcm has internally. Also, make sure the ESMF version above
+    # is compatible with this version of MAPL
+    depends_on("mapl@2.52:", when="~external-mapl")
+    depends_on("mapl@2.52: +debug", when="+external-mapl +debug")
 
     # When we move to FMS as library, we'll need to add something like this:
     depends_on("fms precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Release +deprecated_io", when="@3: ~debug")
