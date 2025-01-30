@@ -44,6 +44,7 @@ class Geosgcm(CMakePackage):
         description="The build type to build",
         values=("Debug", "Release", "Aggressive"),
     )
+
     variant("external-mapl", default=False, description="Build with external MAPL", when="@11.7:")
 
     depends_on("fortran", type="build")
@@ -67,7 +68,7 @@ class Geosgcm(CMakePackage):
     depends_on("python@3:3.12", when="+f2py")
 
     # These are similarly the dependencies of MAPL. Not sure if we'll ever use MAPL as library
-    depends_on("hdf5")
+    depends_on("hdf5 +fortran +hl +threadsafe +mpi")
     depends_on("netcdf-c")
     depends_on("netcdf-fortran")
     depends_on("esmf@8.6.1:")
@@ -76,7 +77,7 @@ class Geosgcm(CMakePackage):
 
     depends_on("gftl@1.14.0:")
     depends_on("gftl-shared@1.9.0:")
-    depends_on("pflogger@1.15.0:")
+    depends_on("pflogger@1.15.0: +mpi")
     depends_on("fargparse@1.8.0:")
 
     # when using apple-clang version 15.x or newer, need to use the llvm-openmp library
@@ -96,6 +97,9 @@ class Geosgcm(CMakePackage):
 
     # We also depend on mepo
     depends_on("mepo", type="build")
+
+    # We have only tested with gcc 13+
+    conflicts("%gcc@:12")
 
     @run_before("cmake")
     def clone_mepo(self):
@@ -131,13 +135,8 @@ class Geosgcm(CMakePackage):
         # Compatibility flags for gfortran
         fflags = []
         if self.compiler.name in ["gcc", "clang", "apple-clang"]:
-            fflags.append("-ffree-line-length-none")
-            gfortran_major_ver = int(
-                spack.compiler.get_compiler_version_output(self.compiler.fc, "-dumpversion").split(
-                    "."
-                )[0]
-            )
-            if gfortran_major_ver >= 10:
+            if "gfortran" in self.compiler.fc:
+                fflags.append("-ffree-line-length-none")
                 fflags.append("-fallow-invalid-boz")
                 fflags.append("-fallow-argument-mismatch")
         if fflags:
