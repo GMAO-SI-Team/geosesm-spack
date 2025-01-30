@@ -130,13 +130,8 @@ class Geosfvdycore(CMakePackage):
         # Compatibility flags for gfortran
         fflags = []
         if self.compiler.name in ["gcc", "clang", "apple-clang"]:
-            fflags.append("-ffree-line-length-none")
-            gfortran_major_ver = int(
-                spack.compiler.get_compiler_version_output(self.compiler.fc, "-dumpversion").split(
-                    "."
-                )[0]
-            )
-            if gfortran_major_ver >= 10:
+            if "gfortran" in self.compiler.fc:
+                fflags.append("-ffree-line-length-none")
                 fflags.append("-fallow-invalid-boz")
                 fflags.append("-fallow-argument-mismatch")
         if fflags:
