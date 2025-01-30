@@ -66,7 +66,7 @@ class Geosfvdycore(CMakePackage):
     depends_on("python@3:3.11", when="+f2py")
 
     # These are similarly the dependencies of MAPL. Not sure if we'll ever use MAPL as library
-    depends_on("hdf5")
+    depends_on("hdf5 +fortran +hl +threadsafe +mpi")
     depends_on("netcdf-c")
     depends_on("netcdf-fortran")
     depends_on("esmf@8.6.1:")
@@ -75,7 +75,7 @@ class Geosfvdycore(CMakePackage):
 
     depends_on("gftl@1.14.0:")
     depends_on("gftl-shared@1.9.0:")
-    depends_on("pflogger@1.15.0:")
+    depends_on("pflogger@1.15.0: +mpi")
     depends_on("fargparse@1.8.0:")
 
     # when using apple-clang version 15.x or newer, need to use the llvm-openmp library
