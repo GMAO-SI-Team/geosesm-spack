@@ -91,8 +91,8 @@ class Geosfvdycore(CMakePackage):
 
     # v3 will have FMS outside of GEOSfvdycore. Note we are only doing 32-bit here as we don't really have
     # support for 64-bit FV3 here...yet?
-    depends_on("fms precision=32 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Release +deprecated_io", when="@3: ~debug")
-    depends_on("fms precision=32 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Debug +deprecated_io", when="@3: +debug")
+    depends_on("fms precision=32 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Release", when="@3: ~debug")
+    depends_on("fms precision=32 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Debug", when="@3: +debug")
 
     # We also depend on mepo
     depends_on("mepo", type="build")
