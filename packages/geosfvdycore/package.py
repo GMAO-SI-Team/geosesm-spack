@@ -45,10 +45,12 @@ class Geosfvdycore(CMakePackage):
         values=("Debug", "Release", "Aggressive"),
     )
 
-    depends_on("cmake@3.24:", type="build")
     variant("external-mapl", default=False, description="Build with external MAPL", when="@3:")
 
-    depends_on("ecbuild", type="build")
+    depends_on("fortran", type="build")
+    depends_on("c", type="build")
+
+    depends_on("cmake@3.24:", type="build")
 
     depends_on("mpi")
 
@@ -61,12 +63,12 @@ class Geosfvdycore(CMakePackage):
     depends_on("py-numpy")
     depends_on("perl")
 
-    # Currently we are having issues with our f2py code and python 3.12 (aka meson) For now
-    # we will restrict the python version to <3.12
-    depends_on("python@3:3.11", when="+f2py")
+    # Currently we have not tested with Python 3.13, so for now
+    # we will restrict the python version to <3.13
+    depends_on("python@3:3.12", when="+f2py")
 
     # These are similarly the dependencies of MAPL. Not sure if we'll ever use MAPL as library
-    depends_on("hdf5")
+    depends_on("hdf5 +fortran +hl +threadsafe +mpi")
     depends_on("netcdf-c")
     depends_on("netcdf-fortran")
     depends_on("esmf@8.6.1:")
@@ -75,7 +77,7 @@ class Geosfvdycore(CMakePackage):
 
     depends_on("gftl@1.14.0:")
     depends_on("gftl-shared@1.9.0:")
-    depends_on("pflogger@1.15.0:")
+    depends_on("pflogger@1.15.0: +mpi")
     depends_on("fargparse@1.8.0:")
 
     # when using apple-clang version 15.x or newer, need to use the llvm-openmp library
@@ -97,10 +99,13 @@ class Geosfvdycore(CMakePackage):
     # We also depend on mepo
     depends_on("mepo", type="build")
 
+    # We have only tested with gcc 13+
+    conflicts("%gcc@:12")
+
     @run_before("cmake")
     def clone_mepo(self):
         with working_dir(self.stage.source_path):
-            # Now we need to run "mepo clone" which is a python script
+            # Now we need to run "mepo clone" which is a python package
             # that will clone the other repositories that are needed
 
             # First we need the path to the mepo script
@@ -130,13 +135,8 @@ class Geosfvdycore(CMakePackage):
         # Compatibility flags for gfortran
         fflags = []
         if self.compiler.name in ["gcc", "clang", "apple-clang"]:
-            fflags.append("-ffree-line-length-none")
-            gfortran_major_ver = int(
-                spack.compiler.get_compiler_version_output(self.compiler.fc, "-dumpversion").split(
-                    "."
-                )[0]
-            )
-            if gfortran_major_ver >= 10:
+            if "gfortran" in self.compiler.fc:
+                fflags.append("-ffree-line-length-none")
                 fflags.append("-fallow-invalid-boz")
                 fflags.append("-fallow-argument-mismatch")
         if fflags:
