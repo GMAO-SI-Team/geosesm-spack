@@ -92,8 +92,8 @@ class Geosgcm(CMakePackage):
     depends_on("mapl@2.52: +debug", when="+external-mapl +debug")
 
     # When we move to FMS as library, we'll need to add something like this:
-    depends_on("fms precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Release +deprecated_io", when="@12: ~debug")
-    depends_on("fms precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Debug +deprecated_io", when="@12: +debug")
+    depends_on("fms@2024.03 precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Release +deprecated_io", when="@12: ~debug")
+    depends_on("fms@2024.03 precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Debug +deprecated_io", when="@12: +debug")
 
     # We also depend on mepo
     depends_on("mepo", type="build")
