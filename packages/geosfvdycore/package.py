@@ -63,10 +63,6 @@ class Geosfvdycore(CMakePackage):
     depends_on("py-numpy")
     depends_on("perl")
 
-    # Currently we have not tested with Python 3.13, so for now
-    # we will restrict the python version to <3.13
-    depends_on("python@3:3.12", when="+f2py")
-
     # These are similarly the dependencies of MAPL. Not sure if we'll ever use MAPL as library
     depends_on("hdf5 +fortran +hl +threadsafe +mpi")
     depends_on("netcdf-c")
@@ -84,6 +80,8 @@ class Geosfvdycore(CMakePackage):
     depends_on("llvm-openmp", when="%apple-clang", type=("build", "run"))
 
     depends_on("udunits")
+
+    depends_on("tcsh", type="run")
 
     # Notice to maintainers, make sure this is the same version as in MAPL
     # that GEOSgcm has internally. Also, make sure the ESMF version above
