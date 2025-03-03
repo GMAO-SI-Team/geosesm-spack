@@ -90,9 +90,12 @@ class Geosgcm(CMakePackage):
     depends_on("mapl@2.52:", when="+external-mapl")
     depends_on("mapl@2.52: +debug", when="+external-mapl +debug")
 
-    # When we move to FMS as library, we'll need to add something like this:
-    depends_on("fms@2024.03 precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Release +deprecated_io", when="@12: ~debug")
-    depends_on("fms@2024.03 precision=32,64 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Debug +deprecated_io", when="@12: +debug")
+    variant("fmsyaml", default=False, description="Build FMS with YAML support")
+    depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", when="@12: ~debug +fmsyaml")
+    depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release", when="@12: ~debug ~fmsyaml")
+
+    depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Debug", when="@12: +debug +fmsyaml")
+    depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug", when="@12: +debug ~fmsyaml")
 
     # We also depend on mepo
     depends_on("mepo", type="build")
@@ -128,6 +131,7 @@ class Geosgcm(CMakePackage):
     def cmake_args(self):
         args = [
             self.define_from_variant("USE_F2PY", "f2py"),
+            self.define_from_variant("FMS_BUILT_WITH_YAML", "fmsyaml"),
             self.define("CMAKE_MODULE_PATH", self.spec["esmf"].prefix.cmake),
         ]
 

@@ -19,11 +19,12 @@ class Geosfvdycore(CMakePackage):
     maintainers("mathomp4", "tclune")
 
     version("main", branch="main")
-    version("3.0.0", branch="feature/sdrabenh/gcm_v12")
+    #version("3.0.0", branch="feature/sdrabenh/gcm_v12")
+    version("3.0.0-rc.1", tag="v3.0.0-rc.1", commit="61a7818e4f4496a0713d721150f94e47eb8f01ac", preferred=True)
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
-    version("2.21.0", tag="v2.21.0", commit="ecd01f19718de9e76fce3d5d5630d4727f67f80d", preferred=True)
+    version("2.21.0", tag="v2.21.0", commit="ecd01f19718de9e76fce3d5d5630d4727f67f80d")
     version("2.20.0", tag="v2.20.0", commit="c8529e55cf002b71b101c265b328155fa848c53d")
     version("2.19.1", tag="v2.19.1", commit="67e6b3915c3e0ebab20e9df29a354db8cc5e987b")
     version("2.19.0", tag="v2.19.0", commit="89ea359c91bae105d7a4a3ac2ca83421b15b5c80")
@@ -89,10 +90,13 @@ class Geosfvdycore(CMakePackage):
     depends_on("mapl@2.52:", when="+external-mapl")
     depends_on("mapl@2.52: +debug", when="+external-mapl +debug")
 
-    # v3 will have FMS outside of GEOSfvdycore. Note we are only doing 32-bit here as we don't really have
-    # support for 64-bit FV3 here...yet?
-    depends_on("fms@2024.03 precision=32 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Release +deprecated_io", when="@3: ~debug")
-    depends_on("fms@2024.03 precision=32 +quad_precision ~gfs_phys +openmp +pic constants=GEOS build_type=Debug +deprecated_io", when="@3: +debug")
+    variant("fmsyaml", default=False, description="Build FMS with YAML support")
+
+    depends_on("fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io +yaml build_type=Release", when="@3: ~debug +fmsyaml")
+    depends_on("fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io ~yaml build_type=Release", when="@3: ~debug ~fmsyaml")
+
+    depends_on("fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io +yaml build_type=Debug",   when="@3: +debug +fmsyaml")
+    depends_on("fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io ~yaml build_type=Debug",   when="@3: +debug ~fmsyaml")
 
     # We also depend on mepo
     depends_on("mepo", type="build")
@@ -127,6 +131,7 @@ class Geosfvdycore(CMakePackage):
     def cmake_args(self):
         args = [
             self.define_from_variant("USE_F2PY", "f2py"),
+            self.define_from_variant("FMS_BUILT_WITH_YAML", "fmsyaml"),
             self.define("CMAKE_MODULE_PATH", self.spec["esmf"].prefix.cmake),
         ]
 
