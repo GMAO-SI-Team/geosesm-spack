@@ -19,6 +19,7 @@ class Geosgcm(CMakePackage):
     maintainers("mathomp4", "tclune")
 
     version("main", branch="main")
+    version("aquaplanet", branch="feature/mathomp4/v12-spack-gcm-aquaplanet")
     version("12.0.0", branch="feature/sdrabenh/gcm_v12")
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
@@ -47,6 +48,10 @@ class Geosgcm(CMakePackage):
 
     variant("external-mapl", default=False, description="Build with external MAPL", when="@11.7:")
 
+    variant("aquaplanet", default=False, description="Build with aquaplanet support (experimental)")
+
+    variant("jemalloc", default=False, description="Use jemalloc for memory allocation")
+
     depends_on("fortran", type="build")
     depends_on("c", type="build")
 
@@ -63,6 +68,9 @@ class Geosgcm(CMakePackage):
     depends_on("py-numpy")
     depends_on("py-ruamel-yaml")
     depends_on("perl")
+
+    # We need questionary for the remapping tool
+    depends_on("py-questionary")
 
     # These are similarly the dependencies of MAPL. Not sure if we'll ever use MAPL as library
     depends_on("hdf5 +fortran +hl +threadsafe +mpi")
@@ -100,6 +108,8 @@ class Geosgcm(CMakePackage):
     # We also depend on mepo
     depends_on("mepo", type="build")
 
+    depends_on("jemalloc", when="+jemalloc")
+
     # We have only tested with gcc 13+
     conflicts("%gcc@:12")
 
@@ -132,6 +142,7 @@ class Geosgcm(CMakePackage):
         args = [
             self.define_from_variant("USE_F2PY", "f2py"),
             self.define_from_variant("FMS_BUILT_WITH_YAML", "fmsyaml"),
+            self.define_from_variant("AQUAPLANET", "aquaplanet"),
             self.define("CMAKE_MODULE_PATH", self.spec["esmf"].prefix.cmake),
         ]
 
