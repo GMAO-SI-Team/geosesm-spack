@@ -49,6 +49,7 @@ class Geosgcm(CMakePackage):
     variant("external-mapl", default=False, description="Build with external MAPL", when="@11.7:")
 
     variant("aquaplanet", default=False, description="Build with aquaplanet support (experimental)")
+    variant("aquaplanet", default=True, description="Build with aquaplanet support (experimental)", when="@aquaplanet")
 
     variant("jemalloc", default=False, description="Use jemalloc for memory allocation")
 
@@ -101,6 +102,9 @@ class Geosgcm(CMakePackage):
     variant("fmsyaml", default=False, description="Build FMS with YAML support")
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", when="@12: ~debug +fmsyaml")
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release", when="@12: ~debug ~fmsyaml")
+
+    depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", when="@aquaplanet ~debug +fmsyaml")
+    depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release", when="@aquaplanet ~debug ~fmsyaml")
 
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Debug", when="@12: +debug +fmsyaml")
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug", when="@12: +debug ~fmsyaml")
