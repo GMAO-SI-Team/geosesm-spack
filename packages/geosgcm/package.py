@@ -19,8 +19,9 @@ class Geosgcm(CMakePackage):
     maintainers("mathomp4", "tclune")
 
     version("main", branch="main")
-    version("aquaplanet", branch="feature/mathomp4/v12-spack-gcm-aquaplanet")
-    version("12.0.0", branch="feature/sdrabenh/gcm_v12")
+    #version("aquaplanet", branch="feature/mathomp4/v12-spack-gcm-aquaplanet")
+    #version("12.0.0", branch="feature/sdrabenh/gcm_v12")
+    version("12.0.0-rc1", tag="v12.0.0-rc1", commit="e9ae1c1aa4ee40151def9ca570a5e525e612b7e1")
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
@@ -49,7 +50,7 @@ class Geosgcm(CMakePackage):
     variant("external-mapl", default=False, description="Build with external MAPL", when="@11.7:")
 
     variant("aquaplanet", default=False, description="Build with aquaplanet support (experimental)")
-    variant("aquaplanet", default=True, description="Build with aquaplanet support (experimental)", when="@aquaplanet")
+    #variant("aquaplanet", default=True, description="Build with aquaplanet support (experimental)", when="@aquaplanet")
 
     variant("jemalloc", default=False, description="Use jemalloc for memory allocation")
 
@@ -103,8 +104,8 @@ class Geosgcm(CMakePackage):
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", when="@12: ~debug +fmsyaml")
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release", when="@12: ~debug ~fmsyaml")
 
-    depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", when="@aquaplanet ~debug +fmsyaml")
-    depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release", when="@aquaplanet ~debug ~fmsyaml")
+    #depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", when="@aquaplanet ~debug +fmsyaml")
+    #depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release", when="@aquaplanet ~debug ~fmsyaml")
 
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Debug", when="@12: +debug +fmsyaml")
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug", when="@12: +debug ~fmsyaml")
