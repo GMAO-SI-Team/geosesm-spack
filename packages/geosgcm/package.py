@@ -21,7 +21,7 @@ class Geosgcm(CMakePackage):
     version("main", branch="main")
     #version("aquaplanet", branch="feature/mathomp4/v12-spack-gcm-aquaplanet")
     #version("12.0.0", branch="feature/sdrabenh/gcm_v12")
-    version("12.0.0-rc1", tag="v12.0.0-rc1", commit="5d302613edaa423f795e286fa9bed52a8b956b2d")
+    version("12.0.0-rc1", tag="v12.0.0-rc1", commit="b41d7d5858a511acea0d62b335ebc5755d309fe5")
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
