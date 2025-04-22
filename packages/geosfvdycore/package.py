@@ -53,6 +53,7 @@ class Geosfvdycore(CMakePackage):
 
     depends_on("fortran", type="build")
     depends_on("c", type="build")
+    depends_on("cxx", type="build")
 
     depends_on("cmake@3.24:", type="build")
 
