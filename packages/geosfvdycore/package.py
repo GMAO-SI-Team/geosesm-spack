@@ -20,6 +20,7 @@ class Geosfvdycore(CMakePackage):
 
     version("main", branch="main")
     #version("3.0.0", branch="feature/sdrabenh/gcm_v12")
+    version("3.0.0-rc.2", tag="v3.0.0-rc.2", commit="c953eb6c22f3b9f8a8ebf8bc261cd80b00637880")
     version("3.0.0-rc.1", tag="v3.0.0-rc.1", commit="61a7818e4f4496a0713d721150f94e47eb8f01ac", preferred=True)
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
@@ -47,6 +48,8 @@ class Geosfvdycore(CMakePackage):
     )
 
     variant("external-mapl", default=False, description="Build with external MAPL", when="@3:")
+
+    variant("jemalloc", default=True, description="Use jemalloc for memory allocation", when="@3:")
 
     depends_on("fortran", type="build")
     depends_on("c", type="build")
@@ -101,6 +104,8 @@ class Geosfvdycore(CMakePackage):
 
     # We also depend on mepo
     depends_on("mepo", type="build")
+
+    depends_on("jemalloc", when="+jemalloc")
 
     # We have only tested with gcc 13+
     conflicts("%gcc@:12")
