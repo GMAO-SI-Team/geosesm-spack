@@ -4,7 +4,8 @@
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 from spack.package import *
-
+from spack.operating_systems.mac_os import macos_cltools_version
+import sys
 
 class Geosfvdycore(CMakePackage):
     """
@@ -20,12 +21,13 @@ class Geosfvdycore(CMakePackage):
 
     version("main", branch="main")
     #version("3.0.0", branch="feature/sdrabenh/gcm_v12")
-    version("3.0.0-rc.3", tag="v3.0.0-rc.3", commit="e72805096fbcb75e87bd68c876aa602d9b2ca36f")
-    version("3.0.0-rc.2", tag="v3.0.0-rc.2", commit="c953eb6c22f3b9f8a8ebf8bc261cd80b00637880", preferred=True)
+    version("3.0.0-rc.3", tag="v3.0.0-rc.3", commit="7f4b922287a860421c145d23a13c7a2f3fc30e69")
+    version("3.0.0-rc.2", tag="v3.0.0-rc.2", commit="c953eb6c22f3b9f8a8ebf8bc261cd80b00637880")
     version("3.0.0-rc.1", tag="v3.0.0-rc.1", commit="61a7818e4f4496a0713d721150f94e47eb8f01ac")
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
+    version("2.23.0", tag="v2.23.0", commit="479b0bb21bc876b3ab56d2cf1de765f8b39aea2b")
     version("2.22.0", tag="v2.22.0", commit="4c6705bb205a26890a0327eeed049cbf5edf6d1a")
     version("2.21.0", tag="v2.21.0", commit="ecd01f19718de9e76fce3d5d5630d4727f67f80d")
     version("2.20.0", tag="v2.20.0", commit="c8529e55cf002b71b101c265b328155fa848c53d")
@@ -111,6 +113,12 @@ class Geosfvdycore(CMakePackage):
 
     # We have only tested with gcc 13+
     conflicts("%gcc@:12")
+
+    # If you have XCode 16.3, we require the v2.23 or v3.0.0-rc.3
+    if sys.platform == "darwin" and macos_cltools_version() >= Version("16.3"):
+        print(f"XCode CL Tools version is {macos_cltools_version()}")
+        conflicts("@:2.22", msg="XCode 16.3+ requires v2.23")
+        conflicts("@:3.0.0-rc.2", msg="XCode 16.3+ requires v3.0.0-rc.3")
 
     @run_before("cmake")
     def clone_mepo(self):
