@@ -115,10 +115,11 @@ class Geosfvdycore(CMakePackage):
     conflicts("%gcc@:12")
 
     # If you have XCode 16.3, we require the v2.23 or v3.0.0-rc.3
-    cltools_ver = macos_cltools_version()
-    if sys.platform == "darwin" and cltools_ver is not None and cltools_ver >= Version("16.3"):
-        conflicts("@:2.22", msg="XCode 16.3+ requires v2.23")
-        conflicts("@:3.0.0-rc.2", msg="XCode 16.3+ requires v3.0.0-rc.3")
+    if sys.platform == "darwin":
+        cltools_ver = macos_cltools_version()
+        if cltools_ver is not None and cltools_ver >= Version("16.3"):
+            conflicts("@:2.22", msg="XCode 16.3+ requires v2.23")
+            conflicts("@:3.0.0-rc.2", msg="XCode 16.3+ requires v3.0.0-rc.3")
 
     @run_before("cmake")
     def clone_mepo(self):
