@@ -53,6 +53,7 @@ class Geosfvdycore(CMakePackage):
 
     variant("external-mapl", default=False, description="Build with external MAPL", when="@3:")
 
+    variant("jemalloc", default=False, description="Use jemalloc for memory allocation", when="@:2")
     variant("jemalloc", default=True, description="Use jemalloc for memory allocation", when="@3:")
 
     depends_on("fortran", type="build")
@@ -67,9 +68,9 @@ class Geosfvdycore(CMakePackage):
     depends_on("lapack")
 
     # These are for MAPL AGC and stubber
-    depends_on("python@3:")
-    depends_on("py-pyyaml")
-    depends_on("py-numpy")
+    depends_on("python@3:", type=("build", "run"))
+    depends_on("py-pyyaml", type=("build", "run"))
+    depends_on("py-numpy", type=("build", "run"))
     depends_on("perl")
 
     # These are similarly the dependencies of MAPL. Not sure if we'll ever use MAPL as library
@@ -88,7 +89,7 @@ class Geosfvdycore(CMakePackage):
     # when using apple-clang version 15.x or newer, need to use the llvm-openmp library
     depends_on("llvm-openmp", when="%apple-clang", type=("build", "run"))
 
-    depends_on("udunits")
+    depends_on("udunits", type=("build", "run"))
 
     depends_on("tcsh", type="run")
 
