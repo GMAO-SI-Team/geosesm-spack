@@ -54,7 +54,8 @@ class Geosgcm(CMakePackage):
     variant("aquaplanet", default=False, description="Build with aquaplanet support (experimental)")
     #variant("aquaplanet", default=True, description="Build with aquaplanet support (experimental)", when="@aquaplanet")
 
-    variant("jemalloc", default=False, description="Use jemalloc for memory allocation")
+    variant("jemalloc", default=False, when="@:11", description="Use jemalloc for memory allocation")
+    variant("jemalloc", default=True, when="@12:", description="Use jemalloc for memory allocation")
 
     depends_on("fortran", type="build")
     depends_on("c", type="build")
@@ -68,11 +69,11 @@ class Geosgcm(CMakePackage):
     depends_on("lapack")
 
     # These are for MAPL AGC and stubber
-    depends_on("python@3:")
-    depends_on("py-pyyaml")
-    depends_on("py-numpy")
+    depends_on("python@3:", type=("build", "run"))
+    depends_on("py-pyyaml", type=("build", "run"))
+    depends_on("py-numpy", type=("build", "run"))
     depends_on("py-ruamel-yaml")
-    depends_on("perl")
+    depends_on("perl", type=("build", "run"))
 
     # We need questionary for the remapping tool
     depends_on("py-questionary")
@@ -93,7 +94,7 @@ class Geosgcm(CMakePackage):
     # when using apple-clang version 15.x or newer, need to use the llvm-openmp library
     depends_on("llvm-openmp", when="%apple-clang", type=("build", "run"))
 
-    depends_on("udunits")
+    depends_on("udunits", type=("build", "run"))
 
     depends_on("tcsh", type="run")
 
