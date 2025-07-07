@@ -21,6 +21,7 @@ class Geosgcm(CMakePackage):
     version("main", branch="main")
     #version("aquaplanet", branch="feature/mathomp4/v12-spack-gcm-aquaplanet")
     #version("12.0.0", branch="feature/sdrabenh/gcm_v12")
+    version("12.0.0-rc.3", tag="v12.0.0-rc.3", commit="5aec9b5c5540a0226bf03feabc7a7d3f4c3c375c")
     version("12.0.0-rc.2", tag="v12.0.0-rc.2", commit="f28b993033d9583080193bf6d2161c896bb07617")
     version("12.0.0-rc1", tag="v12.0.0-rc1", commit="b41d7d5858a511acea0d62b335ebc5755d309fe5")
     # NOTE: We use tag and commit due to an issue in mepo:
