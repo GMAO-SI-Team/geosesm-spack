@@ -22,11 +22,14 @@ class Geosgcm(CMakePackage):
     version("main", branch="main")
     #version("aquaplanet", branch="feature/mathomp4/v12-spack-gcm-aquaplanet")
     #version("12.0.0", branch="feature/sdrabenh/gcm_v12")
+    version("12.0.0-rc.3", tag="v12.0.0-rc.3", commit="5aec9b5c5540a0226bf03feabc7a7d3f4c3c375c")
+    version("12.0.0-rc.2", tag="v12.0.0-rc.2", commit="f28b993033d9583080193bf6d2161c896bb07617")
     version("12.0.0-rc1", tag="v12.0.0-rc1", commit="b41d7d5858a511acea0d62b335ebc5755d309fe5")
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
-    version("11.7.0", tag="v11.7.0", commit="a5c504d04f0b0fc15342a65131c67b5d98e33535", preferred=True)
+    version("11.7.1", tag="v11.7.1", commit="402d26c88408e1d5a75f371a440e5a182e4338e9", preferred=True)
+    version("11.7.0", tag="v11.7.0", commit="a5c504d04f0b0fc15342a65131c67b5d98e33535")
     version("11.6.3", tag="v11.6.3", commit="1bf10d3fd30ad9ee90d3400bd214d88ed763b06f")
     version("11.6.2", tag="v11.6.2", commit="fdbab3d7f32fe17bef689a1cdc5be2da71f03e5e")
     version("11.6.1", tag="v11.6.1", commit="c3a0f1b3c7ea340ed0b532e49742f410da966ec4")
@@ -53,7 +56,8 @@ class Geosgcm(CMakePackage):
     variant("aquaplanet", default=False, description="Build with aquaplanet support (experimental)")
     #variant("aquaplanet", default=True, description="Build with aquaplanet support (experimental)", when="@aquaplanet")
 
-    variant("jemalloc", default=False, description="Use jemalloc for memory allocation")
+    variant("jemalloc", default=False, when="@:11", description="Use jemalloc for memory allocation")
+    variant("jemalloc", default=True, when="@12:", description="Use jemalloc for memory allocation")
 
     depends_on("fortran", type="build")
     depends_on("c", type="build")
@@ -67,11 +71,11 @@ class Geosgcm(CMakePackage):
     depends_on("lapack")
 
     # These are for MAPL AGC and stubber
-    depends_on("python@3:")
-    depends_on("py-pyyaml")
-    depends_on("py-numpy")
+    depends_on("python@3:", type=("build", "run"))
+    depends_on("py-pyyaml", type=("build", "run"))
+    depends_on("py-numpy", type=("build", "run"))
     depends_on("py-ruamel-yaml")
-    depends_on("perl")
+    depends_on("perl", type=("build", "run"))
 
     # We need questionary for the remapping tool
     depends_on("py-questionary")
@@ -92,7 +96,7 @@ class Geosgcm(CMakePackage):
     # when using apple-clang version 15.x or newer, need to use the llvm-openmp library
     depends_on("llvm-openmp", when="%apple-clang", type=("build", "run"))
 
-    depends_on("udunits")
+    depends_on("udunits", type=("build", "run"))
 
     depends_on("tcsh", type="run")
 

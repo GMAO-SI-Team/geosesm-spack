@@ -22,12 +22,15 @@ class Geosfvdycore(CMakePackage):
 
     version("main", branch="main")
     #version("3.0.0", branch="feature/sdrabenh/gcm_v12")
-    version("3.0.0-rc.3", tag="v3.0.0-rc.3", commit="7f4b922287a860421c145d23a13c7a2f3fc30e69", preferred=True)
+    version("3.0.0-rc.5", tag="v3.0.0-rc.5", commit="67fc02ad5910954e275d6d44be1cb66e3b9e9bb3", preferred=True)
+    version("3.0.0-rc.4", tag="v3.0.0-rc.4", commit="8097a2c3ad3d3fbc8551c2da200d8835fd6ff205")
+    version("3.0.0-rc.3", tag="v3.0.0-rc.3", commit="7f4b922287a860421c145d23a13c7a2f3fc30e69")
     version("3.0.0-rc.2", tag="v3.0.0-rc.2", commit="c953eb6c22f3b9f8a8ebf8bc261cd80b00637880")
     version("3.0.0-rc.1", tag="v3.0.0-rc.1", commit="61a7818e4f4496a0713d721150f94e47eb8f01ac")
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
+    version("2.24.0", tag="v2.24.0", commit="eb1cde9a5c8d1ba1e234bc2940c30043a813b05e")
     version("2.23.0", tag="v2.23.0", commit="479b0bb21bc876b3ab56d2cf1de765f8b39aea2b")
     version("2.22.0", tag="v2.22.0", commit="4c6705bb205a26890a0327eeed049cbf5edf6d1a")
     version("2.21.0", tag="v2.21.0", commit="ecd01f19718de9e76fce3d5d5630d4727f67f80d")
@@ -54,6 +57,7 @@ class Geosfvdycore(CMakePackage):
 
     variant("external-mapl", default=False, description="Build with external MAPL", when="@3:")
 
+    variant("jemalloc", default=False, description="Use jemalloc for memory allocation", when="@:2")
     variant("jemalloc", default=True, description="Use jemalloc for memory allocation", when="@3:")
 
     depends_on("fortran", type="build")
@@ -68,9 +72,9 @@ class Geosfvdycore(CMakePackage):
     depends_on("lapack")
 
     # These are for MAPL AGC and stubber
-    depends_on("python@3:")
-    depends_on("py-pyyaml")
-    depends_on("py-numpy")
+    depends_on("python@3:", type=("build", "run"))
+    depends_on("py-pyyaml", type=("build", "run"))
+    depends_on("py-numpy", type=("build", "run"))
     depends_on("perl")
 
     # These are similarly the dependencies of MAPL. Not sure if we'll ever use MAPL as library
@@ -89,7 +93,7 @@ class Geosfvdycore(CMakePackage):
     # when using apple-clang version 15.x or newer, need to use the llvm-openmp library
     depends_on("llvm-openmp", when="%apple-clang", type=("build", "run"))
 
-    depends_on("udunits")
+    depends_on("udunits", type=("build", "run"))
 
     depends_on("tcsh", type="run")
 
