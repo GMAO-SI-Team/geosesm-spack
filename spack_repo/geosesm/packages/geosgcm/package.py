@@ -28,7 +28,9 @@ class Geosgcm(CMakePackage):
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
-    version("11.7.1", tag="v11.7.1", commit="402d26c88408e1d5a75f371a440e5a182e4338e9", preferred=True)
+    version("11.7.3", tag="v11.7.3", commit="526adc8d19300ac3a64bf088843973b6d78d3e95", preferred=True)
+    version("11.7.2", tag="v11.7.2", commit="ed4d529bd22f262b1ac7ff6d565abe4d2d4b0a7e")
+    version("11.7.1", tag="v11.7.1", commit="402d26c88408e1d5a75f371a440e5a182e4338e9")
     version("11.7.0", tag="v11.7.0", commit="a5c504d04f0b0fc15342a65131c67b5d98e33535")
     version("11.6.3", tag="v11.6.3", commit="1bf10d3fd30ad9ee90d3400bd214d88ed763b06f")
     version("11.6.2", tag="v11.6.2", commit="fdbab3d7f32fe17bef689a1cdc5be2da71f03e5e")
@@ -103,8 +105,8 @@ class Geosgcm(CMakePackage):
     # Notice to maintainers, make sure this is the same version as in MAPL
     # that GEOSgcm has internally. Also, make sure the ESMF version above
     # is compatible with this version of MAPL
-    depends_on("mapl@2.52:", when="+external-mapl")
-    depends_on("mapl@2.52: +debug", when="+external-mapl +debug")
+    depends_on("mapl@2.59:", when="+external-mapl")
+    depends_on("mapl@2.59: +debug", when="+external-mapl +debug")
 
     variant("fmsyaml", default=False, description="Build FMS with YAML support")
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", when="@12: ~debug +fmsyaml")
