@@ -22,7 +22,8 @@ class Geosfvdycore(CMakePackage):
 
     version("main", branch="main")
     #version("3.0.0", branch="feature/sdrabenh/gcm_v12")
-    version("3.0.0-rc.5", tag="v3.0.0-rc.5", commit="67fc02ad5910954e275d6d44be1cb66e3b9e9bb3", preferred=True)
+    version("3.0.0-rc.6", tag="v3.0.0-rc.6", commit="f47fb9f5011faaefc3d5f9cf27916bfea80e3051", preferred=True)
+    version("3.0.0-rc.5", tag="v3.0.0-rc.5", commit="67fc02ad5910954e275d6d44be1cb66e3b9e9bb3")
     version("3.0.0-rc.4", tag="v3.0.0-rc.4", commit="8097a2c3ad3d3fbc8551c2da200d8835fd6ff205")
     version("3.0.0-rc.3", tag="v3.0.0-rc.3", commit="7f4b922287a860421c145d23a13c7a2f3fc30e69")
     version("3.0.0-rc.2", tag="v3.0.0-rc.2", commit="c953eb6c22f3b9f8a8ebf8bc261cd80b00637880")
@@ -100,8 +101,8 @@ class Geosfvdycore(CMakePackage):
     # Notice to maintainers, make sure this is the same version as in MAPL
     # that GEOSgcm has internally. Also, make sure the ESMF version above
     # is compatible with this version of MAPL
-    depends_on("mapl@2.52:", when="+external-mapl")
-    depends_on("mapl@2.52: +debug", when="+external-mapl +debug")
+    depends_on("mapl@2.59:", when="+external-mapl")
+    depends_on("mapl@2.59: +debug", when="+external-mapl +debug")
 
     variant("fmsyaml", default=False, description="Build FMS with YAML support")
 
