@@ -22,7 +22,8 @@ class Geosfvdycore(CMakePackage):
 
     version("main", branch="main")
     #version("3.0.0", branch="feature/sdrabenh/gcm_v12")
-    version("3.0.0-rc.6", tag="v3.0.0-rc.6", commit="f47fb9f5011faaefc3d5f9cf27916bfea80e3051", preferred=True)
+    version("3.0.0-rc.8", tag="v3.0.0-rc.8", commit="a91811743e2871c251de9ce6b8684883cb528e32", preferred=True)
+    version("3.0.0-rc.6", tag="v3.0.0-rc.6", commit="f47fb9f5011faaefc3d5f9cf27916bfea80e3051")
     version("3.0.0-rc.5", tag="v3.0.0-rc.5", commit="67fc02ad5910954e275d6d44be1cb66e3b9e9bb3")
     version("3.0.0-rc.4", tag="v3.0.0-rc.4", commit="8097a2c3ad3d3fbc8551c2da200d8835fd6ff205")
     version("3.0.0-rc.3", tag="v3.0.0-rc.3", commit="7f4b922287a860421c145d23a13c7a2f3fc30e69")
@@ -31,6 +32,8 @@ class Geosfvdycore(CMakePackage):
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
+    version("2.26.0", tag="v2.26.0", commit="dd0fc8891635c01059ab1345fc871b0d415d167f")
+    version("2.25.0", tag="v2.25.0", commit="4b520920e61bc68a6320be2d1305842c74ee75bc")
     version("2.24.0", tag="v2.24.0", commit="eb1cde9a5c8d1ba1e234bc2940c30043a813b05e")
     version("2.23.0", tag="v2.23.0", commit="479b0bb21bc876b3ab56d2cf1de765f8b39aea2b")
     version("2.22.0", tag="v2.22.0", commit="4c6705bb205a26890a0327eeed049cbf5edf6d1a")
@@ -101,8 +104,8 @@ class Geosfvdycore(CMakePackage):
     # Notice to maintainers, make sure this is the same version as in MAPL
     # that GEOSgcm has internally. Also, make sure the ESMF version above
     # is compatible with this version of MAPL
-    depends_on("mapl@2.59:", when="+external-mapl")
-    depends_on("mapl@2.59: +debug", when="+external-mapl +debug")
+    depends_on("mapl@2.61:", when="+external-mapl")
+    depends_on("mapl@2.61: +debug", when="+external-mapl +debug")
 
     variant("fmsyaml", default=False, description="Build FMS with YAML support")
 
