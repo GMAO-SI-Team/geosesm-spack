@@ -22,7 +22,9 @@ class Geosfvdycore(CMakePackage):
 
     version("main", branch="main")
     #version("3.0.0", branch="feature/sdrabenh/gcm_v12")
-    version("3.0.0-rc.8", tag="v3.0.0-rc.8", commit="a91811743e2871c251de9ce6b8684883cb528e32", preferred=True)
+    version("3.0.0-rc.10", tag="v3.0.0-rc.10", commit="ca0a3d40e14f87b27081b7bef27eaa4a1f5dc0c2", preferred=True)
+    version("3.0.0-rc.9", tag="v3.0.0-rc.9", commit="e1ff17bcabc69e1c52a665c2555249ffef442168")
+    version("3.0.0-rc.8", tag="v3.0.0-rc.8", commit="a91811743e2871c251de9ce6b8684883cb528e32")
     version("3.0.0-rc.6", tag="v3.0.0-rc.6", commit="f47fb9f5011faaefc3d5f9cf27916bfea80e3051")
     version("3.0.0-rc.5", tag="v3.0.0-rc.5", commit="67fc02ad5910954e275d6d44be1cb66e3b9e9bb3")
     version("3.0.0-rc.4", tag="v3.0.0-rc.4", commit="8097a2c3ad3d3fbc8551c2da200d8835fd6ff205")
