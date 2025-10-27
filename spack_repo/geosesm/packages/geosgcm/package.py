@@ -22,6 +22,8 @@ class Geosgcm(CMakePackage):
     version("main", branch="main")
     #version("aquaplanet", branch="feature/mathomp4/v12-spack-gcm-aquaplanet")
     #version("12.0.0", branch="feature/sdrabenh/gcm_v12")
+    version("12.0.0-rc.6", tag="v12.0.0-rc.6", commit="a1ff8601b8e72fbe2511c02d0c78434c558a5c8f")
+    version("12.0.0-rc.5", tag="v12.0.0-rc.5", commit="d312795ac0be53396a49e611231a7f68c2cdfcdc")
     version("12.0.0-rc.4", tag="v12.0.0-rc.4", commit="6b1698a32b58269255cd97762343bc4d21206252")
     version("12.0.0-rc.3", tag="v12.0.0-rc.3", commit="5aec9b5c5540a0226bf03feabc7a7d3f4c3c375c")
     version("12.0.0-rc.2", tag="v12.0.0-rc.2", commit="f28b993033d9583080193bf6d2161c896bb07617")
