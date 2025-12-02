@@ -20,7 +20,6 @@ class Geosgcm(CMakePackage):
     maintainers("mathomp4", "tclune")
 
     version("main", branch="main")
-    #version("aquaplanet", branch="feature/mathomp4/v12-spack-gcm-aquaplanet")
     #version("12.0.0", branch="feature/sdrabenh/gcm_v12")
     version("12.0.0-rc.6", tag="v12.0.0-rc.6", commit="a1ff8601b8e72fbe2511c02d0c78434c558a5c8f")
     version("12.0.0-rc.5", tag="v12.0.0-rc.5", commit="d312795ac0be53396a49e611231a7f68c2cdfcdc")
@@ -58,9 +57,6 @@ class Geosgcm(CMakePackage):
     )
 
     variant("external-mapl", default=False, description="Build with external MAPL", when="@11.7:")
-
-    variant("aquaplanet", default=False, description="Build with aquaplanet support (experimental)")
-    #variant("aquaplanet", default=True, description="Build with aquaplanet support (experimental)", when="@aquaplanet")
 
     variant("jemalloc", default=False, when="@:11", description="Use jemalloc for memory allocation")
     variant("jemalloc", default=True, when="@12:", description="Use jemalloc for memory allocation")
@@ -116,9 +112,6 @@ class Geosgcm(CMakePackage):
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", when="@12: ~debug +fmsyaml")
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release", when="@12: ~debug ~fmsyaml")
 
-    #depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", when="@aquaplanet ~debug +fmsyaml")
-    #depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release", when="@aquaplanet ~debug ~fmsyaml")
-
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Debug", when="@12: +debug +fmsyaml")
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug", when="@12: +debug ~fmsyaml")
 
@@ -159,7 +152,6 @@ class Geosgcm(CMakePackage):
         args = [
             self.define_from_variant("USE_F2PY", "f2py"),
             self.define_from_variant("FMS_BUILT_WITH_YAML", "fmsyaml"),
-            self.define_from_variant("AQUAPLANET", "aquaplanet"),
             self.define("CMAKE_MODULE_PATH", self.spec["esmf"].prefix.cmake),
         ]
 
