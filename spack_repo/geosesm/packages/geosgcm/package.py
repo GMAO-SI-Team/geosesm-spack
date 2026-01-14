@@ -30,7 +30,8 @@ class Geosgcm(CMakePackage):
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
-    version("11.8.0", tag="v11.8.0", commit="e8e2a4727db6e64dcc55ef3f256b47acb0ae2962", preferred=True)
+    version("11.8.1", tag="v11.8.1", commit="9e1778c83758cfec7b89fc701486c5fc14afdd4a", preferred=True)
+    version("11.8.0", tag="v11.8.0", commit="e8e2a4727db6e64dcc55ef3f256b47acb0ae2962")
     version("11.7.3", tag="v11.7.3", commit="526adc8d19300ac3a64bf088843973b6d78d3e95")
     version("11.7.2", tag="v11.7.2", commit="ed4d529bd22f262b1ac7ff6d565abe4d2d4b0a7e")
     version("11.7.1", tag="v11.7.1", commit="402d26c88408e1d5a75f371a440e5a182e4338e9")
