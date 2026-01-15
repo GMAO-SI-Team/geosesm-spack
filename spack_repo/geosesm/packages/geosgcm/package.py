@@ -95,6 +95,7 @@ class Geosgcm(CMakePackage):
     depends_on("gftl-shared@1.9.0:")
     depends_on("pflogger@1.15.0: +mpi")
     depends_on("fargparse@1.8.0:")
+    depends_on("pfunit +mpi +fhamcrest")
 
     # when using apple-clang version 15.x or newer, need to use the llvm-openmp library
     depends_on("llvm-openmp", when="%apple-clang", type=("build", "run"))
