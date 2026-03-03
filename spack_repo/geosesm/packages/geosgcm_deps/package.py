@@ -18,7 +18,7 @@ class GeosgcmDeps(BundlePackage):
     license("Apache-2.0", checked_by="mathomp4")
 
     version("12.0.0")
-    version("11.8.1")
+    version("11.8.1", preferred=True)
 
     # Keep variants minimal but useful
     variant(
