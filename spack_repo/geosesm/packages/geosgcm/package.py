@@ -87,7 +87,7 @@ class Geosgcm(CMakePackage):
     depends_on("hdf5 +fortran +hl +threadsafe +mpi")
     depends_on("netcdf-c")
     depends_on("netcdf-fortran")
-    depends_on("esmf@8.6.1:")
+    depends_on("esmf@8.9.1:")
     depends_on("esmf ~debug", when="~debug")
     depends_on("esmf +debug", when="+debug")
 
@@ -107,8 +107,8 @@ class Geosgcm(CMakePackage):
     # Notice to maintainers, make sure this is the same version as in MAPL
     # that GEOSgcm has internally. Also, make sure the ESMF version above
     # is compatible with this version of MAPL
-    depends_on("mapl@2.61:", when="+external-mapl")
-    depends_on("mapl@2.61: +debug", when="+external-mapl +debug")
+    depends_on("mapl@2.67:", when="+external-mapl")
+    depends_on("mapl@2.67: +debug", when="+external-mapl +debug")
 
     variant("fmsyaml", default=False, description="Build FMS with YAML support")
     depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", when="@12: ~debug +fmsyaml")
