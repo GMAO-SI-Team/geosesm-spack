@@ -18,11 +18,23 @@ class GeosgcmDeps(BundlePackage):
     license("Apache-2.0", checked_by="mathomp4")
 
     version("12.0.0")
-    version("11")
+    version("11.8.1")
 
     # Keep variants minimal but useful
-    variant("debug", default=False, description="Match GEOSgcm debug-related deps (ESMF)")
-    variant("fmsyaml", default=False, description="Pull in FMS built with YAML support (GEOS v12+)")
+    variant(
+        "debug", default=False, description="Match GEOSgcm debug-related deps (ESMF)"
+    )
+    variant(
+        "fmsyaml",
+        default=False,
+        description="Pull in FMS built with YAML support (GEOS v12+)",
+    )
+    variant(
+        "external-mapl",
+        default=False,
+        description="Pull in MAPL as an external dependency",
+        when="@12:",
+    )
 
     # Tooling / scripting
     depends_on("cmake@3.24:", type="build")
@@ -66,9 +78,20 @@ class GeosgcmDeps(BundlePackage):
     depends_on("mapl@2.67: +debug", when="+external-mapl +debug")
 
     # Optional FMS feature parity with GEOS v12 dependency pins
-    depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", when="@12: ~debug +fmsyaml")
-    depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release", when="@12: ~debug ~fmsyaml")
+    depends_on(
+        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release",
+        when="@12: ~debug +fmsyaml",
+    )
+    depends_on(
+        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release",
+        when="@12: ~debug ~fmsyaml",
+    )
 
-    depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Debug", when="@12: +debug +fmsyaml")
-    depends_on("fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug", when="@12: +debug ~fmsyaml")
-
+    depends_on(
+        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Debug",
+        when="@12: +debug +fmsyaml",
+    )
+    depends_on(
+        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug",
+        when="@12: +debug ~fmsyaml",
+    )
