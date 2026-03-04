@@ -95,3 +95,10 @@ class GeosgcmDeps(BundlePackage):
         "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug",
         when="@12: +debug ~fmsyaml",
     )
+
+    def setup_run_environment(self, env):
+        # Point CMake's FindPython at the Spack-managed Python so it is
+        # preferred over any system/Homebrew Python on the PATH.
+        python_prefix = self.spec["python"].prefix
+        env.set("Python_ROOT_DIR", python_prefix)
+        env.set("Python3_ROOT_DIR", python_prefix)
