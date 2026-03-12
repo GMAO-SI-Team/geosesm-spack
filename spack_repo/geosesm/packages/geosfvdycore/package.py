@@ -22,7 +22,8 @@ class Geosfvdycore(CMakePackage):
 
     version("main", branch="main")
     #version("3.0.0", branch="feature/sdrabenh/gcm_v12")
-    version("3.0.0-rc.10", tag="v3.0.0-rc.10", commit="ca0a3d40e14f87b27081b7bef27eaa4a1f5dc0c2", preferred=True)
+    version("3.0.0-rc.12", tag="v3.0.0-rc.12", commit="4e01a8cd170271b4ff2aa48aeb82c948f2d28b68", preferred=True)
+    version("3.0.0-rc.10", tag="v3.0.0-rc.10", commit="ca0a3d40e14f87b27081b7bef27eaa4a1f5dc0c2")
     version("3.0.0-rc.9", tag="v3.0.0-rc.9", commit="e1ff17bcabc69e1c52a665c2555249ffef442168")
     version("3.0.0-rc.8", tag="v3.0.0-rc.8", commit="a91811743e2871c251de9ce6b8684883cb528e32")
     version("3.0.0-rc.6", tag="v3.0.0-rc.6", commit="f47fb9f5011faaefc3d5f9cf27916bfea80e3051")
@@ -34,6 +35,7 @@ class Geosfvdycore(CMakePackage):
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
+    version("2.29.0", tag="v2.29.0", commit="3e90ff389609b71b659b17df15f5d9b8d69d29ac")
     version("2.26.0", tag="v2.26.0", commit="dd0fc8891635c01059ab1345fc871b0d415d167f")
     version("2.25.0", tag="v2.25.0", commit="4b520920e61bc68a6320be2d1305842c74ee75bc")
     version("2.24.0", tag="v2.24.0", commit="eb1cde9a5c8d1ba1e234bc2940c30043a813b05e")
@@ -87,7 +89,7 @@ class Geosfvdycore(CMakePackage):
     depends_on("hdf5 +fortran +hl +threadsafe +mpi")
     depends_on("netcdf-c")
     depends_on("netcdf-fortran")
-    depends_on("esmf@8.6.1:")
+    depends_on("esmf@8.9.1:")
     depends_on("esmf ~debug", when="~debug")
     depends_on("esmf +debug", when="+debug")
 
@@ -95,6 +97,7 @@ class Geosfvdycore(CMakePackage):
     depends_on("gftl-shared@1.9.0:")
     depends_on("pflogger@1.15.0: +mpi")
     depends_on("fargparse@1.8.0:")
+    depends_on("pfunit +mpi +fhamcrest")
 
     # when using apple-clang version 15.x or newer, need to use the llvm-openmp library
     depends_on("llvm-openmp", when="%apple-clang", type=("build", "run"))
@@ -106,8 +109,8 @@ class Geosfvdycore(CMakePackage):
     # Notice to maintainers, make sure this is the same version as in MAPL
     # that GEOSgcm has internally. Also, make sure the ESMF version above
     # is compatible with this version of MAPL
-    depends_on("mapl@2.61:", when="+external-mapl")
-    depends_on("mapl@2.61: +debug", when="+external-mapl +debug")
+    depends_on("mapl@2.67:", when="+external-mapl")
+    depends_on("mapl@2.67: +debug", when="+external-mapl +debug")
 
     variant("fmsyaml", default=False, description="Build FMS with YAML support")
 
@@ -125,7 +128,7 @@ class Geosfvdycore(CMakePackage):
     # We have only tested with gcc 13+
     conflicts("%gcc@:12")
 
-    # If you have XCode 16.3, we require the v2.23 or v3.0.0-rc.3
+    # If you have XCode 16.3, we require v2.23+ or v3.0.0-rc.3+
     if sys.platform == "darwin":
         cltools_ver = macos_cltools_version()
         if cltools_ver is not None and cltools_ver >= Version("16.3"):
