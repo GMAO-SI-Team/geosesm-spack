@@ -5,12 +5,17 @@
 
 from spack_repo.builtin.build_systems.cmake import CMakePackage
 from spack.package import *
+from spack_repo.geosesm.packages.geosgcm_deps.package import GeosgcmDeps
 
 
-class Geosgcm(CMakePackage):
+class Geosgcm(CMakePackage, GeosgcmDeps):
     """
     GEOS Earth System Model GEOSgcm Fixture
     """
+
+    # Magic command from @becker33 that "undoes" some of the issues
+    # brought by inheriting from GeosgcmDeps which is a BundlePackage
+    has_code = True
 
     homepage = "https://github.com/GEOS-ESM/GEOSgcm"
     url = "https://github.com/GEOS-ESM/GEOSgcm/archive/refs/tags/v11.6.3.tar.gz"
@@ -18,6 +23,8 @@ class Geosgcm(CMakePackage):
     list_url = "https://github.com/GEOS-ESM/GEOSgcm/tags"
 
     maintainers("mathomp4", "tclune")
+
+    license("Apache-2.0", checked_by="mathomp4")
 
     version("main", branch="main")
     #version("12.0.0", branch="feature/sdrabenh/gcm_v12")
@@ -41,8 +48,6 @@ class Geosgcm(CMakePackage):
     version("11.6.1", tag="v11.6.1", commit="c3a0f1b3c7ea340ed0b532e49742f410da966ec4")
     version("11.6.0", tag="v11.6.0", commit="3feaeb6695134ed04ad29079af176d104fdd73bb")
 
-    variant("debug", default=False, description="Build with debugging")
-    variant("f2py", default=False, description="Build with f2py support")
     variant(
         "develop",
         default=False,
@@ -57,87 +62,9 @@ class Geosgcm(CMakePackage):
         values=("Debug", "Release", "Aggressive"),
     )
 
-    variant(
-        "external-mapl",
-        default=False,
-        description="Pull in MAPL as an external dependency",
-        when="@11.7:",
-    )
-
     depends_on("fortran", type="build")
     depends_on("c", type="build")
     depends_on("cxx", type="build")
-
-    # Tooling / scripting
-    depends_on("cmake@3.24:", type="build")
-    depends_on("python@3:", type=("build", "run"))
-    depends_on("py-pyyaml", type=("build", "run"))
-    depends_on("py-numpy", type=("build", "run"))
-    depends_on("py-ruamel-yaml")
-    ## We need questionary for the remapping tool
-    depends_on("py-questionary")
-    ## For MAPL ACG and stubber
-    depends_on("perl", type=("build", "run"))
-    depends_on("tcsh", type="run")
-    depends_on("mepo", type=("build", "run"))
-
-    # Core HPC deps
-    depends_on("mpi")
-    depends_on("blas")
-    depends_on("lapack")
-
-    # Base libraries 
-    depends_on("hdf5 +fortran +hl +threadsafe +mpi")
-    depends_on("netcdf-c")
-    depends_on("netcdf-fortran")
-    depends_on("esmf@8.9.1:")
-    depends_on("esmf ~debug", when="~debug")
-    depends_on("esmf +debug", when="+debug")
-
-    # Utility libs used by MAPL / GEOS ecosystem
-    depends_on("gftl@1.14.0:")
-    depends_on("gftl-shared@1.9.0:")
-    depends_on("pflogger@1.15.0: +mpi")
-    depends_on("fargparse@1.8.0:")
-    depends_on("pfunit +mpi +fhamcrest")
-    depends_on("udunits", type=("build", "run"))
-
-    # Apple clang needs OpenMP runtime
-    depends_on("llvm-openmp", when="%apple-clang", type=("build", "run"))
-
-    # Notice to maintainers, make sure this is the same version as in MAPL
-    # that GEOSgcm has internally. Also, make sure the ESMF version above
-    # is compatible with this version of MAPL
-    depends_on("mapl@2.67:", when="+external-mapl")
-    depends_on("mapl@2.67: +debug", when="+external-mapl +debug")
-
-    # Optional FMS feature parity with GEOS v12 dependency pins
-    variant(
-        "fmsyaml",
-        default=False,
-        description="Pull in FMS built with YAML support (GEOS v12+)",
-    )
-    depends_on(
-        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release",
-        when="@12: ~debug +fmsyaml",
-    )
-    depends_on(
-        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release",
-        when="@12: ~debug ~fmsyaml",
-    )
-
-    depends_on(
-        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Debug",
-        when="@12: +debug +fmsyaml",
-    )
-    depends_on(
-        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug",
-        when="@12: +debug ~fmsyaml",
-    )
-
-    variant("jemalloc", default=False, when="@:11", description="Use jemalloc for memory allocation")
-    variant("jemalloc", default=True, when="@12:", description="Use jemalloc for memory allocation")
-    depends_on("jemalloc", when="+jemalloc")
 
     # We have only tested with gcc 13+
     conflicts("%gcc@:12")

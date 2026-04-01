@@ -12,6 +12,9 @@ class GeosgcmDeps(BundlePackage):
     """Meta-package: everything needed to build GEOSgcm outside Spack."""
 
     homepage = "https://github.com/GEOS-ESM/GEOSgcm"
+    url = "https://github.com/GEOS-ESM/GEOSgcm/archive/refs/tags/v11.6.3.tar.gz"
+    git = "https://github.com/GEOS-ESM/GEOSgcm.git"
+    list_url = "https://github.com/GEOS-ESM/GEOSgcm/tags"
 
     maintainers("mathomp4")
 
