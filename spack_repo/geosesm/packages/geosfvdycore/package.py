@@ -22,7 +22,8 @@ class Geosfvdycore(CMakePackage):
 
     version("main", branch="main")
     #version("3.0.0", branch="feature/sdrabenh/gcm_v12")
-    version("3.0.0-rc.12", tag="v3.0.0-rc.12", commit="4e01a8cd170271b4ff2aa48aeb82c948f2d28b68", preferred=True)
+    version("3.0.0-rc.14", tag="v3.0.0-rc.14", commit="88d68f63e1d3c75b0e98465b527aa6727c16f619", preferred=True)
+    version("3.0.0-rc.12", tag="v3.0.0-rc.12", commit="4e01a8cd170271b4ff2aa48aeb82c948f2d28b68")
     version("3.0.0-rc.10", tag="v3.0.0-rc.10", commit="ca0a3d40e14f87b27081b7bef27eaa4a1f5dc0c2")
     version("3.0.0-rc.9", tag="v3.0.0-rc.9", commit="e1ff17bcabc69e1c52a665c2555249ffef442168")
     version("3.0.0-rc.8", tag="v3.0.0-rc.8", commit="a91811743e2871c251de9ce6b8684883cb528e32")
@@ -35,6 +36,7 @@ class Geosfvdycore(CMakePackage):
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
+    version("2.30.0", tag="v2.30.0", commit="23dfbd0d031976c675650cdd0ae04f4a796160bd")
     version("2.29.0", tag="v2.29.0", commit="3e90ff389609b71b659b17df15f5d9b8d69d29ac")
     version("2.26.0", tag="v2.26.0", commit="dd0fc8891635c01059ab1345fc871b0d415d167f")
     version("2.25.0", tag="v2.25.0", commit="4b520920e61bc68a6320be2d1305842c74ee75bc")
