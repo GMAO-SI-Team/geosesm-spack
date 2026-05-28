@@ -48,7 +48,7 @@ class GeosgcmDeps(BundlePackage):
     depends_on("blas")
     depends_on("lapack")
 
-    # Base libraries 
+    # Base libraries
     depends_on("hdf5 +fortran +hl +threadsafe +mpi")
     depends_on("netcdf-c")
     depends_on("netcdf-fortran")
@@ -80,25 +80,29 @@ class GeosgcmDeps(BundlePackage):
         description="Pull in FMS built with YAML support (GEOS v12+)",
     )
     depends_on(
-        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release",
+        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", #noqa: E501
         when="@12: ~debug +fmsyaml",
     )
     depends_on(
-        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release",
+        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release", #noqa: E501
         when="@12: ~debug ~fmsyaml",
     )
 
     depends_on(
-        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Debug",
+        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Debug", #noqa: E501
         when="@12: +debug +fmsyaml",
     )
     depends_on(
-        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug",
+        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug", #noqa: E501
         when="@12: +debug ~fmsyaml",
     )
 
-    variant("jemalloc", default=False, when="@:11", description="Use jemalloc for memory allocation")
-    variant("jemalloc", default=True, when="@12:", description="Use jemalloc for memory allocation")
+    variant(
+        "jemalloc", default=False, when="@:11", description="Use jemalloc for memory allocation"
+    )
+    variant(
+        "jemalloc", default=True, when="@12:", description="Use jemalloc for memory allocation"
+    )
     depends_on("jemalloc", when="+jemalloc")
 
     def setup_build_environment(self, env):

@@ -3,10 +3,13 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-from spack_repo.builtin.build_systems.cmake import CMakePackage
-from spack.package import *
-from spack.operating_systems.mac_os import macos_cltools_version
 import sys
+
+from spack_repo.builtin.build_systems.cmake import CMakePackage
+
+from spack.operating_systems.mac_os import macos_cltools_version
+from spack.package import *
+
 
 class Geosfvdycore(CMakePackage):
     """
@@ -21,8 +24,13 @@ class Geosfvdycore(CMakePackage):
     maintainers("mathomp4", "tclune")
 
     version("main", branch="main")
-    #version("3.0.0", branch="feature/sdrabenh/gcm_v12")
-    version("3.0.0-rc.14", tag="v3.0.0-rc.14", commit="88d68f63e1d3c75b0e98465b527aa6727c16f619", preferred=True)
+    # version("3.0.0", branch="feature/sdrabenh/gcm_v12")
+    version(
+        "3.0.0-rc.14",
+        tag="v3.0.0-rc.14",
+        commit="88d68f63e1d3c75b0e98465b527aa6727c16f619",
+        preferred=True,
+    )
     version("3.0.0-rc.12", tag="v3.0.0-rc.12", commit="4e01a8cd170271b4ff2aa48aeb82c948f2d28b68")
     version("3.0.0-rc.10", tag="v3.0.0-rc.10", commit="ca0a3d40e14f87b27081b7bef27eaa4a1f5dc0c2")
     version("3.0.0-rc.9", tag="v3.0.0-rc.9", commit="e1ff17bcabc69e1c52a665c2555249ffef442168")
@@ -67,7 +75,9 @@ class Geosfvdycore(CMakePackage):
 
     variant("external-mapl", default=False, description="Build with external MAPL", when="@3:")
 
-    variant("jemalloc", default=False, description="Use jemalloc for memory allocation", when="@:2")
+    variant(
+        "jemalloc", default=False, description="Use jemalloc for memory allocation", when="@:2"
+    )
     variant("jemalloc", default=True, description="Use jemalloc for memory allocation", when="@3:")
 
     depends_on("fortran", type="build")
@@ -116,11 +126,23 @@ class Geosfvdycore(CMakePackage):
 
     variant("fmsyaml", default=False, description="Build FMS with YAML support")
 
-    depends_on("fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io +yaml build_type=Release", when="@3: ~debug +fmsyaml")
-    depends_on("fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io ~yaml build_type=Release", when="@3: ~debug ~fmsyaml")
+    depends_on(
+        "fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io +yaml build_type=Release", #noqa: E501
+        when="@3: ~debug +fmsyaml",
+    )
+    depends_on(
+        "fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io ~yaml build_type=Release", #noqa: E501
+        when="@3: ~debug ~fmsyaml",
+    )
 
-    depends_on("fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io +yaml build_type=Debug",   when="@3: +debug +fmsyaml")
-    depends_on("fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io ~yaml build_type=Debug",   when="@3: +debug ~fmsyaml")
+    depends_on(
+        "fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io +yaml build_type=Debug", #noqa: E501
+        when="@3: +debug +fmsyaml",
+    )
+    depends_on(
+        "fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io ~yaml build_type=Debug", #noqa: E501
+        when="@3: +debug ~fmsyaml",
+    )
 
     # We also depend on mepo
     depends_on("mepo", type="build")
@@ -216,4 +238,3 @@ class Geosfvdycore(CMakePackage):
         # name is common and used all over the place,
         # and if it is set it breaks the mapl build.
         env.unset("BASEDIR")
-

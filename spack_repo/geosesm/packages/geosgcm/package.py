@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 from spack_repo.builtin.build_systems.cmake import CMakePackage
+
 from spack.package import *
 
 
@@ -20,7 +21,7 @@ class Geosgcm(CMakePackage):
     maintainers("mathomp4", "tclune")
 
     version("main", branch="main")
-    #version("12.0.0", branch="feature/sdrabenh/gcm_v12")
+    # version("12.0.0", branch="feature/sdrabenh/gcm_v12")
     version("12.0.0-rc.6", tag="v12.0.0-rc.6", commit="a1ff8601b8e72fbe2511c02d0c78434c558a5c8f")
     version("12.0.0-rc.5", tag="v12.0.0-rc.5", commit="d312795ac0be53396a49e611231a7f68c2cdfcdc")
     version("12.0.0-rc.4", tag="v12.0.0-rc.4", commit="6b1698a32b58269255cd97762343bc4d21206252")
@@ -30,7 +31,9 @@ class Geosgcm(CMakePackage):
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
-    version("11.8.1", tag="v11.8.1", commit="9e1778c83758cfec7b89fc701486c5fc14afdd4a", preferred=True)
+    version(
+        "11.8.1", tag="v11.8.1", commit="9e1778c83758cfec7b89fc701486c5fc14afdd4a", preferred=True
+    )
     version("11.8.0", tag="v11.8.0", commit="e8e2a4727db6e64dcc55ef3f256b47acb0ae2962")
     version("11.7.3", tag="v11.7.3", commit="526adc8d19300ac3a64bf088843973b6d78d3e95")
     version("11.7.2", tag="v11.7.2", commit="ed4d529bd22f262b1ac7ff6d565abe4d2d4b0a7e")
@@ -86,7 +89,7 @@ class Geosgcm(CMakePackage):
     depends_on("blas")
     depends_on("lapack")
 
-    # Base libraries 
+    # Base libraries
     depends_on("hdf5 +fortran +hl +threadsafe +mpi")
     depends_on("netcdf-c")
     depends_on("netcdf-fortran")
@@ -118,25 +121,29 @@ class Geosgcm(CMakePackage):
         description="Pull in FMS built with YAML support (GEOS v12+)",
     )
     depends_on(
-        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release",
+        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", #noqa: E501
         when="@12: ~debug +fmsyaml",
     )
     depends_on(
-        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release",
+        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release", #noqa: E501
         when="@12: ~debug ~fmsyaml",
     )
 
     depends_on(
-        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Debug",
+        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Debug", #noqa: E501
         when="@12: +debug +fmsyaml",
     )
     depends_on(
-        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug",
+        "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug", #noqa: E501
         when="@12: +debug ~fmsyaml",
     )
 
-    variant("jemalloc", default=False, when="@:11", description="Use jemalloc for memory allocation")
-    variant("jemalloc", default=True, when="@12:", description="Use jemalloc for memory allocation")
+    variant(
+        "jemalloc", default=False, when="@:11", description="Use jemalloc for memory allocation"
+    )
+    variant(
+        "jemalloc", default=True, when="@12:", description="Use jemalloc for memory allocation"
+    )
     depends_on("jemalloc", when="+jemalloc")
 
     # We have only tested with gcc 13+
