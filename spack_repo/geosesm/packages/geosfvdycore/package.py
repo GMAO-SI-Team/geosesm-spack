@@ -24,11 +24,9 @@ class Geosfvdycore(CMakePackage):
     maintainers("mathomp4", "tclune")
 
     version("main", branch="main")
-    # version("3.0.0", branch="feature/sdrabenh/gcm_v12")
-    version(
-        "3.0.0-rc.14",
-        tag="v3.0.0-rc.14",
-        commit="88d68f63e1d3c75b0e98465b527aa6727c16f619",
+    version("3.0.0",
+        tag="v3.0.0",
+        commit="a20627d4ed95ce906670348e647b81d1b89808aa",
         preferred=True,
     )
     version("3.0.0-rc.12", tag="v3.0.0-rc.12", commit="4e01a8cd170271b4ff2aa48aeb82c948f2d28b68")
@@ -44,6 +42,7 @@ class Geosfvdycore(CMakePackage):
     # NOTE: We use tag and commit due to an issue in mepo:
     #   https://github.com/GEOS-ESM/mepo/issues/311
     # This hopefully will be fixed soon and we can move to "normal" checksum style
+    version("2.31.0", tag="v2.31.0", commit="78cbe5be2f1fe0b91cc1dd45053628ed6d41400a")
     version("2.30.0", tag="v2.30.0", commit="23dfbd0d031976c675650cdd0ae04f4a796160bd")
     version("2.29.0", tag="v2.29.0", commit="3e90ff389609b71b659b17df15f5d9b8d69d29ac")
     version("2.26.0", tag="v2.26.0", commit="dd0fc8891635c01059ab1345fc871b0d415d167f")
@@ -176,12 +175,6 @@ class Geosfvdycore(CMakePackage):
             # If we use the develop variant, we run "mepo develop GMAO_Shared GEOS_Util"
             if self.spec.satisfies("+develop"):
                 mepo("develop", "GMAO_Shared", "GEOS_Util")
-
-            # Currently, when the version is 12 or higher we also need to run:
-            #  mepo checkout-if-exists feature/sdrabenh/gcm_v12
-            # As this branch is still in development
-            if self.spec.satisfies("@12:"):
-                mepo("checkout-if-exists", "feature/sdrabenh/gcm_v12")
 
     def cmake_args(self):
         args = [

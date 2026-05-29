@@ -18,7 +18,7 @@ class GeosgcmDeps(BundlePackage):
     license("Apache-2.0", checked_by="mathomp4")
 
     version("12.0.0")
-    version("11.8.1", preferred=True)
+    version("11.10.0", preferred=True)
 
     variant("debug", default=False, description="Build with debugging")
     variant("f2py", default=False, description="Build with f2py support")
@@ -81,27 +81,27 @@ class GeosgcmDeps(BundlePackage):
     )
     depends_on(
         "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", #noqa: E501
-        when="@12: ~debug +fmsyaml",
+        when="@11.10: ~debug +fmsyaml",
     )
     depends_on(
         "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release", #noqa: E501
-        when="@12: ~debug ~fmsyaml",
+        when="@11.10: ~debug ~fmsyaml",
     )
 
     depends_on(
         "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Debug", #noqa: E501
-        when="@12: +debug +fmsyaml",
+        when="@11.10: +debug +fmsyaml",
     )
     depends_on(
         "fms@2024.03 precision=32,64 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug", #noqa: E501
-        when="@12: +debug ~fmsyaml",
+        when="@11.10: +debug ~fmsyaml",
     )
 
     variant(
-        "jemalloc", default=False, when="@:11", description="Use jemalloc for memory allocation"
+        "jemalloc", default=False, when="@:11.9", description="Use jemalloc for memory allocation"
     )
     variant(
-        "jemalloc", default=True, when="@12:", description="Use jemalloc for memory allocation"
+        "jemalloc", default=True, when="@11.10:", description="Use jemalloc for memory allocation"
     )
     depends_on("jemalloc", when="+jemalloc")
 
