@@ -32,7 +32,7 @@ class GeosgcmDeps(BundlePackage):
     )
 
     # Tooling / scripting
-    depends_on("cmake@3.24:", type="build")
+    depends_on("cmake@3.24:", type=("build", "run"))
     depends_on("python@3:", type=("build", "run"))
     depends_on("py-pyyaml", type=("build", "run"))
     depends_on("py-numpy", type=("build", "run"))
