@@ -22,6 +22,7 @@ class GeosgcmDeps(BundlePackage):
 
     variant("debug", default=False, description="Build with debugging")
     variant("f2py", default=False, description="Build with f2py support")
+    variant("questionary", default=False, description="Include py-questionary for the remapping tool")
 
     variant(
         "external-mapl",
@@ -35,9 +36,9 @@ class GeosgcmDeps(BundlePackage):
     depends_on("python@3:", type=("build", "run"))
     depends_on("py-pyyaml", type=("build", "run"))
     depends_on("py-numpy", type=("build", "run"))
-    depends_on("py-ruamel-yaml")
-    ## We need questionary for the remapping tool
-    depends_on("py-questionary")
+    depends_on("py-ruamel-yaml", type=("build", "run"))
+    ## We need questionary for the remapping tool (optional, expensive to build)
+    depends_on("py-questionary", type="run", when="+questionary")
     ## For MAPL ACG and stubber
     depends_on("perl", type=("build", "run"))
     depends_on("tcsh", type="run")
