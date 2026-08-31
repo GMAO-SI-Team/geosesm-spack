@@ -83,20 +83,27 @@ class Geosfvdycore(CMakePackage):
     depends_on("c", type="build")
     depends_on("cxx", type="build")
 
+    # Tooling / scripting
     depends_on("cmake@3.24:", type="build")
-
-    depends_on("mpi")
-
-    depends_on("blas")
-    depends_on("lapack")
-
-    # These are for MAPL AGC and stubber
+    depends_on("meson", type="build")
+    depends_on("ninja", type="build")
     depends_on("python@3:", type=("build", "run"))
     depends_on("py-pyyaml", type=("build", "run"))
     depends_on("py-numpy", type=("build", "run"))
-    depends_on("perl")
+    depends_on("py-ruamel-yaml", type=("build", "run"))
+    depends_on("py-netcdf4", type=("build", "run"))
+    depends_on("py-python-dateutil", type=("build", "run"))
+    ## For MAPL ACG and stubber
+    depends_on("perl", type=("build", "run"))
+    depends_on("tcsh", type="run")
+    depends_on("mepo", type=("build", "run"))
 
-    # These are similarly the dependencies of MAPL. Not sure if we'll ever use MAPL as library
+    # Core HPC deps
+    depends_on("mpi")
+    depends_on("blas")
+    depends_on("lapack")
+
+    # Base libraries
     depends_on("hdf5 +fortran +hl +threadsafe +mpi")
     depends_on("netcdf-c")
     depends_on("netcdf-fortran")
@@ -104,6 +111,7 @@ class Geosfvdycore(CMakePackage):
     depends_on("esmf ~debug", when="~debug")
     depends_on("esmf +debug", when="+debug")
 
+    # Utility libs used by MAPL / GEOS ecosystem
     depends_on("gftl@1.14.0:")
     depends_on("gftl-shared@1.9.0:")
     depends_on("pflogger@1.15.0: +mpi")
@@ -115,8 +123,6 @@ class Geosfvdycore(CMakePackage):
 
     depends_on("udunits", type=("build", "run"))
 
-    depends_on("tcsh", type="run")
-
     # Notice to maintainers, make sure this is the same version as in MAPL
     # that GEOSgcm has internally. Also, make sure the ESMF version above
     # is compatible with this version of MAPL
@@ -126,25 +132,22 @@ class Geosfvdycore(CMakePackage):
     variant("fmsyaml", default=False, description="Build FMS with YAML support")
 
     depends_on(
-        "fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io +yaml build_type=Release", #noqa: E501
+        "fms@2024.03 precision=32 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Release", #noqa: E501
         when="@3: ~debug +fmsyaml",
     )
     depends_on(
-        "fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io ~yaml build_type=Release", #noqa: E501
+        "fms@2024.03 precision=32 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Release", #noqa: E501
         when="@3: ~debug ~fmsyaml",
     )
 
     depends_on(
-        "fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io +yaml build_type=Debug", #noqa: E501
+        "fms@2024.03 precision=32 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io +yaml build_type=Debug", #noqa: E501
         when="@3: +debug +fmsyaml",
     )
     depends_on(
-        "fms@2024.03 precision=32 ~gfs_phys +pic constants=GEOS +deprecated_io ~yaml build_type=Debug", #noqa: E501
+        "fms@2024.03 precision=32 ~gfs_phys +openmp +pic constants=GEOS +deprecated_io ~yaml build_type=Debug", #noqa: E501
         when="@3: +debug ~fmsyaml",
     )
-
-    # We also depend on mepo
-    depends_on("mepo", type="build")
 
     depends_on("jemalloc", when="+jemalloc")
 
@@ -231,3 +234,10 @@ class Geosfvdycore(CMakePackage):
         # name is common and used all over the place,
         # and if it is set it breaks the mapl build.
         env.unset("BASEDIR")
+
+    def setup_run_environment(self, env):
+        # Point CMake's FindPython at the Spack-managed Python so it is
+        # preferred over any system/Homebrew Python on the PATH.
+        python_prefix = self.spec["python"].prefix
+        env.set("Python_ROOT_DIR", python_prefix)
+        env.set("Python3_ROOT_DIR", python_prefix)

@@ -39,6 +39,8 @@ class GeosgcmDeps(BundlePackage):
     depends_on("py-pyyaml", type=("build", "run"))
     depends_on("py-numpy", type=("build", "run"))
     depends_on("py-ruamel-yaml", type=("build", "run"))
+    depends_on("py-netcdf4", type=("build", "run"))
+    depends_on("py-python-dateutil", type=("build", "run"))
     ## We need questionary for the remapping tool (optional, expensive to build)
     depends_on("py-questionary", type="run", when="+questionary")
     ## For MAPL ACG and stubber
