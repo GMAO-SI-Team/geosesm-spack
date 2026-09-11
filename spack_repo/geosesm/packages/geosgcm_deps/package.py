@@ -57,7 +57,7 @@ class GeosgcmDeps(BundlePackage):
     depends_on("hdf5 +fortran +hl +threadsafe +mpi")
     depends_on("netcdf-c")
     depends_on("netcdf-fortran")
-    depends_on("esmf@8.9.1:")
+    depends_on("esmf@8.9.1: ~pnetcdf ~xerces")
     depends_on("esmf ~debug", when="~debug")
     depends_on("esmf +debug", when="+debug")
 
